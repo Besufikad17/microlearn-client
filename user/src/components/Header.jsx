@@ -1,10 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { selectUser } from "../features/userSlice";
+import { useState } from "react";
+import { useUser } from "../store";
 
 function Header(props) {
 
-  const user = useSelector(selectUser);
+  const [isOpen, setIsOpen] = useState(false);
+  const user = useUser((state) => state.user);
+  const logout = useUser((state) => state.logout);
 
   let i = 0;
   const links = props.links.map((link) => {
@@ -22,11 +24,14 @@ function Header(props) {
     <div>
       <nav className="navbar navbar-dark navbar-expand-md bg-dark py-3">
         <div className="container">
-
           {/* Logo section */}
           <a className="navbar-brand d-flex align-items-center" href="#">
             <span className="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon">
-              {props.img ? <img src={props.img} alt="" /> : <span>{props.title}</span>}
+              {props.img ? (
+                <img src={props.img} alt="" />
+              ) : (
+                <span>{props.title}</span>
+              )}
             </span>
           </a>
 
@@ -38,7 +43,7 @@ function Header(props) {
             data-bs-target="#navcol-6"
           >
             <span className="visually-hidden">Toggle navigation</span>
-            <span className="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon" onClick={() => setIsOpen(!isOpen)}></span>
           </button>
 
           {/* Navigation links */}
@@ -48,12 +53,21 @@ function Header(props) {
           >
             <ul className="navbar-nav me-auto">
               {user ? (
-                <li className="nav-item" key={i}>
-                  <a className="nav-link" href={`/user/${user._id}`}>
-                    {user.user.username}
-                  </a>
-                </li>
-              ) : links}
+                <div>
+                  <li className="nav-item">
+                    <a className="nav-link" href={`/user/${user._id}`}>
+                      {user.username}
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a class="btn btn-primary" role="button" href="#" onClick={() => logout()}>
+                      Logout
+                    </a>
+                  </li>
+                </div>
+              ) : (
+                links
+              )}
             </ul>
           </div>
         </div>

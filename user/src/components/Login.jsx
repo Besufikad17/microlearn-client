@@ -2,9 +2,7 @@ import React from "react";
 import axios from "axios";
 import { FaUserAlt } from "react-icons/fa";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import { setErrorMsg } from "../features/errorSlice";
-import { login } from "../features/userSlice"; 
+import { useUser } from "../store";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
@@ -24,8 +22,9 @@ const validationSchema = yup.object({
 function Login() {
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
+  const login = useUser(state => state.setUser);
+  const setToken = useUser(state => state.setToken);
+ 
   const formik = useFormik({
     initialValues : {
       email: "",
@@ -38,12 +37,12 @@ function Login() {
       .post("http://localhost:5000/api/user_login", values)
       .then((res) => {
         console.log(res.data);
-        dispatch(login(res.data));
+        login(res.data.user);
+        setToken(res.data.token);
         navigate("/");
       })
       .catch((err) => {
         console.log(err.response.data.msg);
-        dispatch(setErrorMsg(err.response.data.msg));
       });
     }
   })

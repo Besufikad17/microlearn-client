@@ -1,10 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
-import useReducer from "./features/userSlice";
-import instructorReducer from "./features/instructorSlice";
+import create from "zustand";
+import { persist } from "zustand/middleware";
 
-export default configureStore({
-    reducer: {
-        user: useReducer,
-        instructor: instructorReducer
-    }
-});
+const useUser = create(
+    persist(
+        (set) => {
+            return {
+                user: null,
+                token: null,
+
+                setUser: (newUser) => set((state) => ({ ...state, user: newUser })),
+                setToken: (newToken) => set((state) => ({ ...state, token:newToken })),
+                logout: () => set((state) => ({ ...state,user : null, token: null }))
+            }
+        },
+        {
+            name: "user-info"
+        }
+    )
+)
+
+export { useUser }

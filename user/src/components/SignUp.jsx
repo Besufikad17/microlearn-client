@@ -2,9 +2,7 @@ import React from "react";
 import axios from "axios";
 import { FaUserAlt } from "react-icons/fa";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import { setErrorMsg } from "../features/errorSlice";
-import { register } from "../features/userSlice"; 
+import { useUser } from "../store";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
@@ -36,7 +34,8 @@ const validationSchema = yup.object({
 function SignUp() {
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const register = useUser(state => state.setUser);
+  const setToken = useUser(state => state.setToken);
 
   const formik = useFormik({
     initialValues: {
@@ -53,7 +52,8 @@ function SignUp() {
       .post("http://localhost:5000/api/user_signup", values)
       .then((res) => {
         console.log(res.data);
-        dispatch(register(res.data));
+        register(res.data.user);
+        setToken(res.data.token);
         navigate("/");
       })
       .catch((err) => {
