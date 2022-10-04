@@ -4,3 +4,12 @@
 .off {
   color: #ccc;
 }
+
+.parent {
+  display: flex;
+}
+
+.child {
+  justify-content: center;
+  align-items: center;
+}

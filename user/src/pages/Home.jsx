@@ -50,7 +50,7 @@ const Home = () => {
         </div>
       </div>
 
-      <Footer links={[["Logout", "/logout"]]} />
+      <Footer links={[["Logout", "/logout"], ["Instructor", "/instructor"]]} />
     </div>
   );
 };

@@ -3,10 +3,8 @@ import { useState } from "react";
 import { useUser } from "../store";
 
 function Header(props) {
-
   const [isOpen, setIsOpen] = useState(false);
   const user = useUser((state) => state.user);
-  const logout = useUser((state) => state.logout);
 
   let i = 0;
   const links = props.links.map((link) => {
@@ -19,6 +17,12 @@ function Header(props) {
       </li>
     );
   });
+
+  const toggle = () =>{
+    console.log(isOpen);
+    setIsOpen(true)
+    console.log(isOpen);
+  }
 
   return (
     <div>
@@ -43,7 +47,10 @@ function Header(props) {
             data-bs-target="#navcol-6"
           >
             <span className="visually-hidden">Toggle navigation</span>
-            <span className="navbar-toggler-icon" onClick={() => setIsOpen(!isOpen)}></span>
+            <span
+              className="navbar-toggler-icon"
+              onClick={() => setIsOpen(!isOpen)}
+            ></span>
           </button>
 
           {/* Navigation links */}
@@ -55,13 +62,8 @@ function Header(props) {
               {user ? (
                 <div>
                   <li className="nav-item">
-                    <a className="nav-link" href={`/user/${user._id}`}>
+                    <a className="nav-link" href={`/user/${user.username}`}>
                       {user.username}
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a class="btn btn-primary" role="button" href="#" onClick={() => logout()}>
-                      Logout
                     </a>
                   </li>
                 </div>
